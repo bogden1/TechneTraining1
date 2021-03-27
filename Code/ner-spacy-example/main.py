@@ -4,7 +4,7 @@ from functools import reduce
 
 
 def join_strings(x, y):
-    return x + " " + y
+    return str(x) + " " + str(y)
 
 
 def extract_orgs(doc):
@@ -20,7 +20,7 @@ def process(chunk):
         extract_orgs(doc)
 
 
-def read_chunk(fname, chunk=100, rows=10000):
+def read_chunk(fname, chunk=100, rows=100000):
     df = pd.read_csv(
         fname,
         header=None,
@@ -37,5 +37,5 @@ orgs = []
 
 nlp = spacy.load("en_core_web_sm")
 
-chunk = read_chunk("../../Data/regulation_search_results_10000.txt.gz")
+chunk = read_chunk("../../Data/regulation_search_results_10000.txt.gz", rows=10000)
 process(chunk)
