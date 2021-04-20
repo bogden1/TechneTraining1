@@ -49,7 +49,7 @@ def read_doc_topics(file_name):
         file_name = fields[0]
         topic_probs = [float(x) for x in fields[1:]]
         topics_per_doc[file_name] = topic_probs
-    file_name.close()
+    doc_topics.close()
     return topics_per_doc
 
 def plot_doc_topics(doc_ids, doc_topic_lookup, topic_count):
@@ -60,3 +60,9 @@ def plot_doc_topics(doc_ids, doc_topic_lookup, topic_count):
         ax[int(i/2), i % 2].bar(x = [str(x) for x in range(topic_count)], height = topic_probs)
     return fig, ax
 
+def filter_topics_by_threshold(topic_dict, threshold):
+    filtered_dict = {}
+    for k,v in topic_dict.items():
+        scores = [x if x >= threshold else 0.0 for i,x in enumerate(v)]
+        filtered_dict[k] = scores
+    return filtered_dict
