@@ -13,6 +13,8 @@ from matplotlib import pyplot
 from sklearn.feature_extraction.text import TfidfVectorizer
 import seaborn as sns
 import pandas as pd
+import ipywidgets as widgets
+
 
 def add_to_dict(D, k, v=1):
     if k in D:
@@ -52,11 +54,19 @@ def read_doc_topics(file_name):
     doc_topics.close()
     return topics_per_doc
 
-def plot_doc_topics(doc_ids, doc_topic_lookup, topic_count):
+def normalise(v):
+    norm = np.linalg.norm(v, ord=1)
+    if norm == 0: 
+       return v
+    return v / norm
+
+def plot_doc_topics(doc_ids, doc_topic_lookup, topic_count, normalise=True):
     fig, ax = pyplot.subplots(2,2)
     fig.set_size_inches(8.5,5)
     for i, file_number in enumerate(doc_ids):
         topic_probs = doc_topic_lookup["file_" + str(file_number) + ".txt"]
+        if normalise:
+            topic_probs = normalise(topic_probs)
         ax[int(i/2), i % 2].bar(x = [str(x) for x in range(topic_count)], height = topic_probs)
     return fig, ax
 
@@ -66,3 +76,13 @@ def filter_topics_by_threshold(topic_dict, threshold):
         scores = [x if x >= threshold else 0.0 for i,x in enumerate(v)]
         filtered_dict[k] = scores
     return filtered_dict
+
+def topic_to_class_scores(topic_scores, topic_class_map):
+    file_class_scores = {}
+    max_class = max([v for v in topic_class_map.values()])
+    for doc_id,scores in topic_scores.items():
+        class_scores = np.zeros(max_class)
+        for t,s in enumerate(scores):
+            class_scores[topic_class_map[t]] += s
+        file_class_scores[doc_id] = class_scores
+    return file_class_scores
