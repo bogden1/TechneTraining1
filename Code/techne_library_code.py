@@ -132,7 +132,7 @@ def prepare_for_ml(tfidf_features, classes_per_doc, file_to_idx_map):
 
     return training_files, training_features, training_class
 
-def draw_confusion(y_true, y_pred, model):
+def draw_confusion(y_true, y_pred, model, class_names):
     fig, ax = pyplot.subplots(1,1,figsize=(7, 7))
     N = len(model.classes_)
     sns.heatmap(pd.DataFrame(confusion_matrix(y_true, y_pred, normalize=None),
