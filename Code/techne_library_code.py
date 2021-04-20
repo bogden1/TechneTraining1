@@ -81,7 +81,7 @@ def topic_to_class_scores(topic_scores, topic_class_map):
     file_class_scores = {}
     max_class = max([v for v in topic_class_map.values()])
     for doc_id,scores in topic_scores.items():
-        class_scores = np.zeros(max_class)
+        class_scores = np.zeros(max_class+1)
         for t,s in enumerate(scores):
             class_scores[topic_class_map[t]] += s
         file_class_scores[doc_id] = class_scores
