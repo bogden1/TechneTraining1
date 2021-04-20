@@ -49,7 +49,7 @@ def read_doc_topics(file_name):
         file_name = fields[0]
         topic_probs = [float(x) for x in fields[1:]]
         topics_per_doc[file_name] = topic_probs
-    doc_topic_file.close()
+    file_name.close()
     return topics_per_doc
 
 def plot_doc_topics(doc_ids, doc_topic_lookup, topic_count):
