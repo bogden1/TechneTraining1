@@ -54,7 +54,7 @@ def read_doc_topics(file_name):
     doc_topics.close()
     return topics_per_doc
 
-def normalise(v):
+def normalise_vector(v):
     norm = np.linalg.norm(v, ord=1)
     if norm == 0: 
        return v
@@ -66,7 +66,7 @@ def plot_doc_topics(doc_ids, doc_topic_lookup, topic_count, normalise=True):
     for i, file_number in enumerate(doc_ids):
         topic_probs = doc_topic_lookup["file_" + str(file_number) + ".txt"]
         if normalise:
-            topic_probs = normalise(topic_probs)
+            topic_probs = normalise_vector(topic_probs)
         ax[int(i/2), i % 2].bar(x = [str(x) for x in range(topic_count)], height = topic_probs)
     return fig, ax
 
