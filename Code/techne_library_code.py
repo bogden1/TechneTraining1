@@ -14,6 +14,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import seaborn as sns
 import pandas as pd
 import ipywidgets as widgets
+from matplotlib.colors import LogNorm
 
 
 def add_to_dict(D, k, v=1):
@@ -86,3 +87,47 @@ def topic_to_class_scores(topic_scores, topic_class_map):
             class_scores[topic_class_map[t]] += s
         file_class_scores[doc_id] = class_scores
     return file_class_scores
+
+def load_content_file_map(file_name):
+    file_domain = {}
+    file_map = open(data_drive + "TM/content_file_map.txt","r")
+    file_url = {}
+    for row in file_map:
+        fields = row[:-1].split("|")
+        file_url[fields[0]] = fields[1]
+        file_domain[fields[0]] = fields[1].split("/")[0]
+    file_map.close()
+
+def load_content(file_name):
+    content_file = open(file_name, "r")
+    file_contents = {}
+    for row in content_file:
+        fields = row[:-1].split("|")
+        file_contents[fields[0]] = fields[1]
+    content_file.close()
+    return file_content
+
+def load_summaries(file_name):
+    summary_file = open(file_name, 'r')
+    file_summaries = {}
+    for row in summary_file:
+        fields = row[:-1].split("|")
+        file_summaries[fields[0]] = fields[1]
+    summary_file.close()
+    return file_summaries
+
+def prepare_for_ml(tfidf_features, classes_per_doc, file_to_idx_map):
+    training_files = []
+    training_features = []
+    training_class = []
+    feature_matrix = tfidf_features.todense()
+
+    for filename, scores in classes_per_doc.items():
+        norm_scores = normalise_vector(scores)
+        highest = np.argmax(norm_scores)
+        training_files.append(filename)
+        training_class.append(highest)
+        training_features.append(feature_matrix[file_to_idx_map[filename]])
+    training_features = np.vstack(training_features)
+
+    return training_files, training_features, training_class
