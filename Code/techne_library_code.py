@@ -105,7 +105,7 @@ def load_content(file_name):
         fields = row[:-1].split("|")
         file_contents[fields[0]] = fields[1]
     content_file.close()
-    return file_content
+    return file_contents
 
 def load_summaries(file_name):
     summary_file = open(file_name, 'r')
@@ -131,3 +131,13 @@ def prepare_for_ml(tfidf_features, classes_per_doc, file_to_idx_map):
     training_features = np.vstack(training_features)
 
     return training_files, training_features, training_class
+
+def draw_confusion(y_true, y_pred, model):
+    fig, ax = tlc.pyplot.subplots(1,1,figsize=(7, 7))
+    N = len(model.classes_)
+    sns.heatmap(pd.DataFrame(confusion_matrix(y_true, y_pred, normalize=None),
+                             range(N), range(N)), cmap='magma', annot=True, annot_kws={"size": 15}, fmt='g', ax = ax) #, norm=LogNorm())
+    #ax.table(cellText=topN[{'TaxonomyCategory','TAXID'}].sort_values(by='TAXID').values, colLabels=['TaxonomyCategory','TAXID'], loc='top')
+    ax.set_xticklabels([class_names[c] for c in model.classes_])
+    ax.set_yticklabels([class_names[c] for c in model.classes_], rotation = 30)
+    return fig, ax
