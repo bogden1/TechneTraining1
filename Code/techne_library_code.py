@@ -146,7 +146,7 @@ class MLData:
         self.file_to_idx = {}
         for row in content_file:
             fields = row[:-1].split("|")
-            if len_fields[1] == 0:
+            if len(fields[1]) == 0:
                 continue
             self.corpus.append(self.clean_string(fields[1].lower()))
             self.file_to_idx[fields[0]] = len(self.corpus)
