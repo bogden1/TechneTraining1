@@ -169,10 +169,15 @@ class MLData:
         inclusions = np.ones(len(feature_ids), dtype=bool)
         response_classes = np.ones(len(feature_ids)) * -1
         for k,v in self.file_classes.items():
-            if np.max(v) > 0:
-                response_classes[self.file_to_idx[k]] = np.argmax(v)
-            if v in exclude_classes:
-                inclusions[self.file_to_idx[k]] = False
+            prob = np.max(v)
+            if prob == 0:
+                continue
+            response = np.argmax(v)
+            idx = self.file_to_idx[k]
+            if response in exclude_classes:
+                inclusions[idx] = False
+            else:
+                response_classes[idx] = response
         return feature_matrix[inclusions], response_classes[inclusions], feature_idx[inclusions]
 
 
