@@ -152,7 +152,7 @@ class MLData:
             self.file_to_idx[fields[0]] = len(self.corpus)
             self.file_contents[fields[0]] = fields[1]
             self.file_classes[fields[0]] = -1
-        self.idx_to_file = dict((v,k) for k,v in file_to_idx.items())
+        self.idx_to_file = dict((v,k) for k,v in self.file_to_idx.items())
         content_file.close()
 
     def set_classes(self, file_classes):
