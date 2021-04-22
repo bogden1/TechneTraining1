@@ -178,7 +178,7 @@ class MLData:
                 inclusions[idx] = False
             else:
                 response_classes[idx] = response
-        return feature_matrix[inclusions], response_classes[inclusions], feature_idx[inclusions]
+        return feature_matrix[inclusions], response_classes[inclusions], feature_ids[inclusions]
 
 
 
