@@ -160,7 +160,7 @@ class MLData:
 
     def get_tfidf(self, features, min_df, max_df):
         self.vectorizer = TfidfVectorizer(max_features=features, min_df=min_df, max_df=max_df, stop_words = self.stop_words)
-        self.TFIDF = vectorizer.fit_transform(corpus)
+        self.TFIDF = self.vectorizer.fit_transform(self.corpus)
 
 
 def prepare_for_ml(tfidf_features, classes_per_doc, file_to_idx_map):
