@@ -116,6 +116,53 @@ def load_summaries(file_name):
     summary_file.close()
     return file_summaries
 
+class MLData:
+
+    def __init__(self):
+        self.corpus = []
+        self.file_contents = {}
+        self.file_to_idx = {}
+        self.stop_words = []
+        self.file_classes = {}
+
+    def clean_string(self,string):
+        out_string = ""
+        for c in string:
+            if c.isalpha():
+                out_string += c
+            else:
+                if len(out_string) > 0 and out_string[-1] != " ":
+                    out_string += " "
+        return out_string
+
+    def add_stop_words(self, *stop_words):
+        for w in stop_words:
+            self.stop_words.append(w)
+
+    def load_content(self,file_names):
+        content_file = open(file_name, "r")
+        self.file_contents = {}
+        self.corpus = []
+        self.file_to_idx = {}
+        for row in content_file:
+            fields = row[:-1].split("|")
+            if len_fields[1] == 0:
+                continue
+            self.corpus.append(self.clean_string(fields[1].lower()))
+            self.file_to_idx[fields[0]] = len(self.corpus)
+            self.file_contents[fields[0]] = fields[1]
+            self.file_classes[fields[0]] = -1
+        content_file.close()
+
+    def set_classes(self, file_classes):
+        for k,v in file_classes.items():
+            self.file_classes[k] = v
+
+    def get_tfidf(self, features, min_df, max_df):
+        self.vectorizer = TfidfVectorizer(max_features=features, min_df=min_df, max_df=max_df, stop_words = self.stop_words)
+        self.TFIDF = vectorizer.fit_transform(corpus)
+
+
 def prepare_for_ml(tfidf_features, classes_per_doc, file_to_idx_map):
     training_files = []
     training_features = []
