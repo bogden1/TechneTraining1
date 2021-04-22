@@ -168,7 +168,7 @@ class MLData:
         feature_ids = np.array([x for x in range(feature_matrix.shape[0])])
         inclusions = np.ones(len(feature_ids), dtype=bool)
         response_classes = np.ones(len(feature_ids)) * -1
-        for k,v in self.file_classes:
+        for k,v in self.file_classes.items():
             response_classes[file_to_idx[k]] = v
             if v in exclude_classes:
                 inclusions[file_to_idx[k]] = False
