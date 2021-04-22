@@ -149,7 +149,7 @@ class MLData:
             if len(fields[1]) == 0:
                 continue
             self.corpus.append(self.clean_string(fields[1].lower()))
-            self.file_to_idx[fields[0]] = len(self.corpus)
+            self.file_to_idx[fields[0]] = len(self.corpus)-1
             self.file_contents[fields[0]] = fields[1]
             self.file_classes[fields[0]] = -1
         self.idx_to_file = dict((v,k) for k,v in self.file_to_idx.items())
