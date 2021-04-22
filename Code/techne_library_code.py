@@ -139,7 +139,7 @@ class MLData:
         for w in stop_words:
             self.stop_words.append(w)
 
-    def load_content(self,file_names):
+    def load_content(self,file_name):
         content_file = open(file_name, "r")
         self.file_contents = {}
         self.corpus = []
