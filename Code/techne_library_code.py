@@ -152,15 +152,28 @@ class MLData:
             self.file_to_idx[fields[0]] = len(self.corpus)
             self.file_contents[fields[0]] = fields[1]
             self.file_classes[fields[0]] = -1
+        self.idx_to_file = dict((v,k) for k,v in file_to_idx.items())
         content_file.close()
 
     def set_classes(self, file_classes):
         for k,v in file_classes.items():
             self.file_classes[k] = v
 
-    def get_tfidf(self, features, min_df, max_df):
+    def calc_tfidf(self, features, min_df, max_df):
         self.vectorizer = TfidfVectorizer(max_features=features, min_df=min_df, max_df=max_df, stop_words = self.stop_words)
         self.TFIDF = self.vectorizer.fit_transform(self.corpus)
+
+    def get_ml_data(self, exclude_classes = [-1]):
+        feature_matrix = self.TFIDF.todense()
+        feature_ids = np.array([x for x in range(feature_matrix.shape[0])])
+        inclusions = np.ones(len(feature_ids), dtype=bool)
+        response_classes = np.ones(len(feature_ids)) * -1
+        for k,v in self.file_classes:
+            response_classes[file_to_idx[k]] = v
+            if v in exclude_classes:
+                inclusions[file_to_idx[k]] = False
+        return feature_matrix[inclusions], response_classes[inclusions], feature_idx[inclusions]
+
 
 
 def prepare_for_ml(tfidf_features, classes_per_doc, file_to_idx_map):
