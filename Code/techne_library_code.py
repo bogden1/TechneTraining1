@@ -4,7 +4,6 @@ import numpy as np
 from operator import itemgetter
 from math import log
 import random
-from gensim.summarization.summarizer import summarize
 from sklearn.naive_bayes import BernoulliNB
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
