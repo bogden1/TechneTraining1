@@ -1,5 +1,5 @@
 import os
-from sklearn.model_selection import train_test_split
+import sklearn.model_selection
 import numpy as np
 from operator import itemgetter
 from math import log
@@ -15,6 +15,11 @@ import pandas as pd
 import ipywidgets as widgets
 from matplotlib.colors import LogNorm
 
+def train_test_split(*args, **kwargs):
+  a = sklearn.model_selection.train_test_split(*args, **kwargs)
+  b = [np.asarray(a[0]), np.asarray(a[1])]
+  b.extend(a[2:])
+  return b
 
 def add_to_dict(D, k, v=1):
     if k in D:
